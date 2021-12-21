@@ -5,6 +5,7 @@ const mongoose = require('mongoose');
 const bodyParser = require('body-parser');
 //cors Requirement and fixation
 const cors = require('cors');
+const path = require('path');
 const corsOptions = {
   origin: '*',
   credentials: true, //access-control-allow-credentials:true
