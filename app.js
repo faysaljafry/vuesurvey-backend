@@ -2,6 +2,7 @@ require('dotenv').config();
 const jwt = require('jsonwebtoken');
 const express = require('express');
 const mongoose = require('mongoose');
+const mongo = require('mongodb');
 const bodyParser = require('body-parser');
 //cors Requirement and fixation
 const cors = require('cors');
@@ -15,16 +16,18 @@ const corsOptions = {
 //Connection string to MongoDB
 const uri =
   'mongodb+srv://faysaljafry:faisal0341!@vuejs.yelyi.mongodb.net/CubeSurvey?retryWrites=true&w=majority';
-mongoose
-  .connect(uri, {
-    useNewUrlParser: true,
-    useUnifiedTopology: true,
-  })
-  .then(() => {
-    console.log('MongoDB Connected');
-  })
-  .catch((err) => console.log(err));
-
+const MongoClient = mongo.MongoClient;
+var client;
+var mongoClient = new MongoClient(uri, {
+  useNewUrlParser: true,
+});
+mongoClient.connect((err, db) => {
+  if (err != null) {
+    console.log(err);
+    return;
+  }
+  client = db;
+});
 // create our express app
 const app = express();
 // middleware
@@ -66,7 +69,21 @@ app.post('/login?', (req, res) => {
     });
   }
 });
-const port = process.env.PORT;
+app.post('/saveform', (req, res) => {
+  const questions_collection = client.db('CubeSurvey').collection('questions');
+  questions_collection.insertOne(
+    { title: req.body.questions },
+    function (err, result) {
+      if (err) {
+        console.log(err);
+        res.send('400');
+        return;
+      }
+      res.send('Question were added successfully');
+    }
+  );
+});
+const port = process.env.PORT || 3000;
 //start server
 app.listen(port, () => {
   console.log(`listeniing at port: ${port}`);
