@@ -66,7 +66,8 @@ app.post('/login?', (req, res) => {
     });
   }
 });
+const port = process.env.PORT;
 //start server
-app.listen(process.env.port || 3000, () => {
-  console.log('listeniing at port:3000');
+app.listen(port, () => {
+  console.log(`listeniing at port: ${port}`);
 });
