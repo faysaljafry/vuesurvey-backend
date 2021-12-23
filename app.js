@@ -37,11 +37,11 @@ app.use(cors(corsOptions)); // Use this after the variable declaration
 //Adding following code to App.js will enable the system to serve on
 //Static Ports. This will help heroku to serve pages easily
 
-// app.use(express.static(path.join(__dirname, './dist')));
+app.use(express.static(path.join(__dirname, './dist')));
 
-// app.get('/*', (req, res) => {
-//   res.sendFile(path.join(__dirname, './dist', 'index.html'));
-// });
+app.get('/*', (req, res) => {
+  res.sendFile(path.join(__dirname, './dist', 'index.html'));
+});
 // routes
 app.get('/', (req, res) => {
   res.send('Express Server for Survey Application');
